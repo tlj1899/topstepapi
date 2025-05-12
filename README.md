@@ -188,7 +188,7 @@ print(mytable)
 ```
 ---
 
-### 8. Real-Time Streaming (SignalR)
+### 9. Real-Time Streaming (SignalR)
 
 > **Note:** Real-time streaming requires `signalrcore` and is optional.
 
