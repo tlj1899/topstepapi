@@ -132,6 +132,62 @@ bars = client.history.retrieve_bars(
 
 ---
 
+### 8. Display Bars
+
+```python
+import json, csv
+from io import StringIO
+from prettytable import PrettyTable, from_csv
+
+filename = "bars.json"
+
+with open(filename, "w") as file:
+    json.dump(bars, file)
+
+json_file_path = "bars.json"
+csv_file_path = "bars.csv"
+
+def convert_json_to_csv(json_file_path, csv_file_path):
+    """
+    Converts JSON data to CSV format.
+
+    Args:
+        json_file_path (str): Path to the JSON file.
+        csv_file_path (str): Path to the output CSV file.
+    """
+    with open(json_file_path, 'r') as json_file:
+        data = json.load(json_file)
+
+    if not data:
+        print("JSON file is empty.")
+        return
+
+    if not isinstance(data, list):
+         data = [data]
+
+    if not all(isinstance(item, dict) for item in data):
+        raise ValueError("JSON data must be a list of dictionaries or a single dictionary.")
+    
+    csv_columns = data[0].keys()
+    try:
+        with open(csv_file_path, 'w', newline='') as csv_file:
+            writer = csv.DictWriter(csv_file, fieldnames=csv_columns)
+            writer.writeheader()
+            for row in data:
+                writer.writerow(row)
+    except IOError:
+        print("I/O error")
+
+convert_json_to_csv(json_file_path, csv_file_path)
+
+with open("bars.csv") as fp:
+    mytable = from_csv(fp)
+
+print(mytable)
+
+```
+---
+
 ### 8. Real-Time Streaming (SignalR)
 
 > **Note:** Real-time streaming requires `signalrcore` and is optional.
